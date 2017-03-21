@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="https://rawgit.com/regularjs/regular/master/dist/regular.js"></script>
+</head>
+<style>
+*{
+  font-size: 25px;
+}
+  input{
+    margin: 40px auto 10px;
+    display: block;
+    width: 70%;
+    height: 40px;
+    line-height: 40px;
+    border: solid 1px #999;
+  }
+  .str{
+    margin: 0 auto;
+    display: block;
+    width: 70%;
+    line-height: 30px;
+  }
+</style>
+<body>
+	<div id="app"></div>
+
+<script id="hello" type="text/regular" name="hello">
+  <input type="text" r-model={value}  on-input={this.onInput($event)} on-compositionstart={this.onCS($event)}  on-compositionend={this.onCE($event)} ><br/>
+  <div class="str">
+    {#list str as item}
+    {item} 
+    {/list}
+  </div>
+  
+</script>
+
+<!-- 引入regular.js -->
+
+
+<script>
+//利用Regular构建你的app吧
+var HelloRegular = Regular.extend({
+  	template: '#hello',
+  	data:{
+  		str:[]
+  	},
+    onInput:function(_event){
+        var _value = this.data.value.trim(),_data;
+        if(/^[0-9a-zA-Z]{4}$/.test(_value)){
+            this.data.str.push(this.data.value);
+            
+        }
+        this.$update();
+    },
+    onCS:function(){
+      console.log('compositionstart');
+    },
+    onCE:function(){
+      console.log('compositionend');
+    }
+});
+
+// initialize component then $inject to #app's  bottom
+var component = new HelloRegular({
+  data: {username: "leeluolee"}
+});
+component.$inject('#app'); 
+</script>
+</body>
+</html>
